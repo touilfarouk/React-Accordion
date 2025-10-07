@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>React Accordion with Scrollable Content</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      background: #ffffff;
+      padding: 40px;
+      margin: 0;
+    }
+
+    .main {
+      background: #ffffff;
+      width: 100%;
+      min-height: 100vh;
+      padding: 90px 20px;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .wrapper {
+      width: 600px;
+      margin: 0 auto;
+    }
+
+    .accordion-wrapper + * {
+      margin-top: 0.5em;
+    }
+
+    .accordion-title {
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      padding: 0.8em 1.5em;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to right, #99f2c8, #1f4037);
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .accordion-title:hover {
+      opacity: 0.9;
+    }
+
+    .accordion-title::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid #fff;
+      margin-left: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    .accordion-title.open::after {
+      transform: rotate(180deg);
+    }
+
+    .accordion-item {
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      background: #f8f8f8;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .accordion-item.collapsed {
+      max-height: 0;
+      transition: max-height 0.25s ease;
+    }
+
+    .accordion-content {
+      padding: 1em 1.5em;
+      color: #333;
+      max-height: 8.5em; /* ≈ 5 lines of text (1.6 line-height × 5 = 8em) */
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #1f4037 #eaeaea;
+    }
+
+    /* Scrollbar for Chrome / Edge */
+    .accordion-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    .accordion-content::-webkit-scrollbar-thumb {
+      background-color: #1f4037;
+      border-radius: 3px;
+    }
+    .accordion-content::-webkit-scrollbar-track {
+      background: #eaeaea;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
+    <div id="app"></div>
+  </div>
+
+  <!-- ✅ React + ReactDOM via CDN -->
+  <script src="https://unpkg.com/react@16.14.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@16.14.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ✅ React App -->
+  <script type="text/babel">
+    const Accordion = ({ title, children }) => {
+      const [isOpen, setOpen] = React.useState(false);
+      return (
+        <div className="accordion-wrapper">
+          <div
+            className={`accordion-title ${isOpen ? "open" : ""}`}
+            onClick={() => setOpen(!isOpen)}
+          >
+            {title}
+          </div>
+          <div className={`accordion-item ${!isOpen ? "collapsed" : ""}`}>
+            <div className="accordion-content">{children}</div>
+          </div>
+        </div>
+      );
+    };
+
+    const App = () => (
+      <div className="wrapper">
+        <Accordion title="🌤 Why is the sky blue?">
+          Sunlight reaches Earth's atmosphere and is scattered in all directions by all the gases and particles in the air.
+          Blue light is scattered more than other colors because it travels as shorter, smaller waves. This is why we see a
+          blue sky most of the time. <br/><br/>
+          On a cloudy day, the sky looks gray because sunlight is scattered equally in all directions. During sunrise or
+          sunset, the sky turns orange and red due to longer wavelengths passing through more atmosphere.
+        </Accordion>
+
+        <Accordion title="🪐 What's it like inside Jupiter?">
+          It's really hot inside Jupiter! Scientists estimate it could reach about 43,000°F (24,000°C) near the core. <br/><br/>
+          The extreme gravity compresses hydrogen into metallic form deep within the planet, creating intense pressure. <br/><br/>
+          Jupiter doesn’t have a solid surface; it’s mostly swirling gases and liquids. Any spacecraft entering it would be
+          crushed long before reaching the center.
+        </Accordion>
+
+        <Accordion title="🕳 What is a black hole?">
+          A black hole is a region in space where gravity is so strong that nothing—not even light—can escape. <br/><br/>
+          They form when massive stars collapse at the end of their life cycles. <br/><br/>
+          Black holes can grow by absorbing nearby stars or merging with other black holes. <br/><br/>
+          At their center lies a singularity, where physics as we know it breaks down. <br/><br/>
+          The boundary beyond which nothing escapes is called the event horizon.
+        </Accordion>
+      </div>
+    );
+
+    ReactDOM.render(<App />, document.getElementById("app"));
+  </script>
+</body>
+</html>
